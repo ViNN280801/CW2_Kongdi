@@ -3,17 +3,18 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include <locale.h>
 
 #define N 30
 
 void print_menu()
 {
-    printf("1. Manual input\n2. Random input\n3. Exit\nEnter the value: ");
+    printf("1. Ручной ввод\n2. Заполнение случайными числами\n3. Выход\nВвдите значение: ");
 }
 
 void print_int_arr(const int *parr)
 {
-    printf("\n==== ==== ==== ====\nArray of integers: \n");
+    printf("\n==== ==== ==== ====\nМассив целочисленных: \n");
     for (int i = 0; i < N; i++)
     {
         printf("parr[%d] = %d\n", i, parr[i]);
@@ -21,36 +22,36 @@ void print_int_arr(const int *parr)
     printf("==== ==== ==== ====\n\n");
 }
 
-// Returns "true" if memory for array was allocated correctly
-// Otherwise returns "false"
+// Возвращает "true", если память для массива была выделена правильно
+// В противном случае возвращает "false"
 bool is_allocated(int *p)
 {
     return (!p) ? false : true;
 }
 
-// Allocates memory for integer array with cheking on correctness
+// Выделяет память для целочисленного массива с проверкой правильности
 int *alloc_mem_int_arr()
 {
     int *parr_rdm = (int *)calloc(N, sizeof(int));
 
     if (!is_allocated(parr_rdm))
     {
-        printf("Can't allocate memory for array of integers. Exiting with \'-1\' status\n");
+        printf("Ошибка: Память для массива целочисленных чисел не может быть выделена. Выход со статусом \'-1\'\n");
         exit(-1);
     }
 
     return parr_rdm;
 }
 
-// Deallocating memory of 'p' pointer
+// Освобождение памяти указателя 'p'
 void dealloc_mem_int_arr(int *p)
 {
     free(p);
     p = NULL;
 }
 
-// Changes original 'parr' array
-// If element is negative -> replace it with it's square value
+// Изменяет исходный массив 'parr'
+// Если элемент отрицательный -> замените его на его квадратное значение
 void replace_negative_to_square(int *parr)
 {
     for (int i = 0; i < N; i++)
@@ -60,13 +61,13 @@ void replace_negative_to_square(int *parr)
     }
 }
 
-// Returns an array, which is filled with a manually entered values
+// Возвращает массив, который заполняется введенными вручную значениями
 int *arr_input_manual()
 {
-    // Allocating memory (30 * 4 bytes (default int size))
+    // Выделение памяти (30 * 4 байта (размер int по умолчанию))
     int *parr = (int *)calloc(N, sizeof(int));
 
-    // Checking correctness of allocating memory
+    // Проверка правильности выделения памяти
     if (!parr)
         return NULL;
 
@@ -79,7 +80,7 @@ int *arr_input_manual()
     return parr;
 }
 
-// Returns an array, which is filled with a random numbers
+// Возвращает массив, который заполнен случайными числами
 int *arr_input_rndm()
 {
     srand(time(NULL));
@@ -88,7 +89,7 @@ int *arr_input_rndm()
     if (!parr)
         return NULL;
 
-    // Filling array with random integer values
+    // Заполнение массива случайными целочисленными значениями
     for (int i = 0; i < N; i++)
     {
         parr[i] = rand() % 5 - 5;
@@ -97,8 +98,8 @@ int *arr_input_rndm()
     return parr;
 }
 
-// Returns "true" if 'parr' sequence is non-decreasing
-// Otherwise - "false"
+// Возвращает "true", если последовательность 'parr' неубывающая
+// В противном случае - "ложь"
 bool is_non_decreasing_sequence(int *parr)
 {
     bool flag = true;
@@ -112,7 +113,7 @@ bool is_non_decreasing_sequence(int *parr)
     return flag;
 }
 
-// Returns sum of all elements in a sequence
+// Возвращает сумму всех элементов в последовательности
 int sum_elems_in_arr(int *parr)
 {
     int sum = 0;
@@ -125,7 +126,7 @@ int sum_elems_in_arr(int *parr)
     return sum;
 }
 
-// Returns product of all elements in a sequence
+// Возвращает произведение всех элементов в последовательности
 unsigned long long product_elems_in_arr(int *parr)
 {
     long long product = 1;
@@ -138,17 +139,18 @@ unsigned long long product_elems_in_arr(int *parr)
     return product;
 }
 
-// Prints sum of elements if 'parr' is non-decreasing sequence
-// Otherwise prints product of elements
+// Выводит сумму элементов, если 'parr' является неубывающей последовательностью
+// В противном случае печатается произведение элементов
 void print_results_of_cheking(int *parr)
 {
     if (is_non_decreasing_sequence(parr))
-        printf("Sum of elements in the sequence = %d\n", sum_elems_in_arr(parr));
+        printf("Произведение всех элементов в последовательности = %d\n", sum_elems_in_arr(parr));
     else
-        printf("Product of elements in the sequence = %llu\n", product_elems_in_arr(parr));
+        printf("Произведение всех элементов в последовательности = %llu\n", product_elems_in_arr(parr));
 }
 
-// Perform some functionality which is set by 'input' variable
+// Выполняет некоторую функциональность, 
+// которая задается переменной 'input'
 void menu(int input)
 {
     switch (input)
@@ -176,16 +178,19 @@ void menu(int input)
         break;
     }
     case 3:
-        printf("Exiting ...\n");
+        printf("Выход ...\n");
         break;
     default:
-        printf("Wrong input, try again\n");
+        printf("Неверный ввод, попробуйте снова\n");
         break;
     }
 }
 
 int main()
 {
+    // Подключение локализации русского языка
+    setlocale(LC_ALL, "rus");
+
     int input = 0;
 
     while (input != 3)
