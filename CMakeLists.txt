@@ -7,7 +7,7 @@ project(cw2_kongdi
 )
 
 set(CMAKE_C_STANDARD 17)
-set(CMAKE_C_FLAGS "-lm -Wall -Wpedantic -Wextra")
+set(CMAKE_C_FLAGS "-lm -std=c17 -Wall -Wpedantic -Wextra")
 
 add_executable(task1 task1.c)
 add_executable(task2 task2.c)
