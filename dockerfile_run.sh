@@ -19,13 +19,12 @@ docker pull alpine:latest
 # Building project with control work #2
 docker build -t cw2_kongdi .
 
-while true; do
-    printf "${blue}Do you want to run this container? y/N: ${reset_colour}"
-    read choice
-    if [[ "$choice" == "y" ]] || [[ "$choice" == "Y" ]]; then
-        # Running container
-        docker container run cw2_kongdi:latest
-    elif [[ "$choice" == "n" ]] || [[ "$choice" == "N" ]]; then
-        break
-    fi
-done
+printf "${blue}Do you want to run this container? y/N: ${reset_colour}"
+read choice
+
+if [[ "$choice" == "y" ]] || [[ "$choice" == "Y" ]]; then
+    # Running container
+    docker container run cw2_kongdi:latest
+elif [[ "$choice" == "n" ]] || [[ "$choice" == "N" ]]; then
+    break
+fi
