@@ -2,7 +2,7 @@
 
 Control work #2. 10 variant.
 
-<h1>Control work #2</h1>
+<h2>Control work #2</h2>
 <h3>Task 1. Recurrent sequences</h3>
 <p>&emsp;Develop a program for calculating the recurrent sequence
 and displaying the result on the screen, taking into account the additional conditions
