@@ -2,7 +2,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
-#include <string.h>
 #include <locale.h>
 
 #define N 5
