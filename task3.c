@@ -10,29 +10,34 @@
 // Переменная для хранения максимального размера вводимой строки
 #define BUFFER_SIZE 256
 
-void print_int_arr(int arr_size, int parr[arr_size])
+void print_double_arr(size_t arr_size, double parr[arr_size])
 {
     printf("\n==== ==== ==== ==== ====\nМассив отрицательных значений: \n");
-    for (int i = 0; i < arr_size; i++)
+    for (size_t i = 0UL; i < arr_size; i++)
     {
-        printf("arr[%d] = %d\n", i, parr[i]);
+        printf("arr[%ld] = %f\n", i, parr[i]);
     }
     printf("==== ==== ==== ==== ====\n\n");
 }
 
 void print_menu()
 {
+    printf("1. Начать работу\n2. Выход\nВвдите значение: ");
+}
+
+void print_submenu()
+{
     printf("1. Ручной ввод\n2. Заполнение случайными числами\n3. Выход\nВвдите значение: ");
 }
 
-void print_int_matrix(int rows, int cols, int matrix[rows][cols])
+void print_double_matrix(size_t rows, size_t cols, double matrix[rows][cols])
 {
     // Простая итерация по матрице по индексам строки и столбца
-    for (int row = 0; row < rows; row++)
+    for (size_t row = 0UL; row < rows; row++)
     {
-        for (int col = 0; col < cols; col++)
+        for (size_t col = 0UL; col < cols; col++)
         {
-            printf("%d\t", matrix[row][col]);
+            printf("%f\t", matrix[row][col]);
         }
         printf("\n");
     }
@@ -40,10 +45,10 @@ void print_int_matrix(int rows, int cols, int matrix[rows][cols])
 
 // Возвращает число, введённое пользователем
 // Обрабатывает возможный ввод символов или строки
-int input_int()
+double input_double()
 {
     // Инициализация массива 256-ью нулями
-    char buffer[BUFFER_SIZE] = {0};
+    char buffer[BUFFER_SIZE] = {'0'};
 
     // Пользователь вводит строку
     scanf("%s", buffer);
@@ -51,7 +56,7 @@ int input_int()
     // Если функция atoi() возвращает 0, т.е.
     // ей не удалось преобразовать введённую строку в число,
     // выводим сообщение и просим заново ввести число
-    while (atoi(buffer) == 0)
+    while (atof(buffer) == 0.0)
     {
         printf("Вы ввели не число. Попробуйте снова: ");
         scanf("%s", buffer);
@@ -59,38 +64,38 @@ int input_int()
 
     // Строка преобразуется в число с помощью atoi() (alpha to numeric)
     // Затем возвращается целочисленное значение
-    return atoi(buffer);
+    return atof(buffer);
 }
 
 // Заполняет пользовательскими числами переданную как аргумент матрицу
-void matrix_input_manual(int rows, int cols, int matrix[rows][cols])
+void matrix_input_manual(size_t rows, size_t cols, double matrix[rows][cols])
 {
-    for (int row = 0; row < rows; row++)
+    for (size_t row = 0UL; row < rows; row++)
     {
-        for (int col = 0; col < cols; col++)
+        for (size_t col = 0UL; col < cols; col++)
         {
-            printf("матрица[%d][%d] = ", row, col);
-            matrix[row][col] = input_int();
+            printf("матрица[%ld][%ld] = ", row, col);
+            matrix[row][col] = input_double();
         }
     }
 }
 
 // Заполняет случайными числами переданную как аргумент матрицу
-void matrix_input_random(int rows, int cols, int matrix[rows][cols])
+void matrix_input_random(size_t rows, size_t cols, double matrix[rows][cols])
 {
     srand(time(NULL));
 
-    for (int row = 0; row < N; row++)
+    for (size_t row = 0UL; row < N; row++)
     {
-        for (int col = 0; col < M; col++)
+        for (size_t col = 0UL; col < M; col++)
         {
-            matrix[row][col] = rand() % 10 - 2;
+            matrix[row][col] = (double)rand() / RAND_MAX * 6.0 - 5.0;
         }
     }
 }
 
 // Возвращает количество столбцов с отрицательными значениями из матрицы
-int count_cols_with_negative(int rows, int cols, int matrix[rows][cols])
+int count_cols_with_negative(size_t rows, size_t cols, double matrix[rows][cols])
 {
     // Инициализирующий счетчик, который будет возвращен в качестве результата
     // и переменная, которая характеризует, что мы уже увеличили
@@ -98,14 +103,14 @@ int count_cols_with_negative(int rows, int cols, int matrix[rows][cols])
     int count = 0, used_col = -1;
 
     // Сперва итерация по столбцам матрицы, затем итерация по строкам
-    for (int col = 0; col < M; col++)
+    for (size_t col = 0UL; col < M; col++)
     {
-        for (int row = 0; row < N; row++)
+        for (size_t row = 0UL; row < N; row++)
         {
             // Если найден отрицательный элемент и эти столбцы ранее не встречались
             // запомните его (присвоть ему значение 'used_col')
             // затем увеличьте счетчик столбцов с отрицательными элементами
-            if ((matrix[row][col] < 0) && (used_col != col))
+            if ((matrix[row][col] < 0) && (used_col != (int)col))
             {
                 used_col = col;
                 count++;
@@ -117,19 +122,19 @@ int count_cols_with_negative(int rows, int cols, int matrix[rows][cols])
 }
 
 // Заполняет массив 'dest' 1-ым отрицательным значением из каждого столбца матрицы
-void save_1st_negative_col_elems(int rows, int cols, int matrix[rows][cols], int *dest)
+void save_1st_negative_col_elems(size_t rows, size_t cols, double matrix[rows][cols], double *dest)
 {
     int used_col = -1, count = 0;
 
-    for (int col = 0; col < cols; col++)
+    for (size_t col = 0UL; col < cols; col++)
     {
-        for (int row = 0; row < rows; row++)
+        for (size_t row = 0UL; row < rows; row++)
         {
             // Если найден отрицательный элемент и эти столбцы ранее не встречались
             // запомните его (присвоите ему значение 'used_col')
             // затем увеличьте счетчик столбцов с отрицательными элементами
             // и используйте этот счетчик для заполнения массива 'negative_elems'
-            if ((matrix[row][col] < 0) && (used_col != col))
+            if ((matrix[row][col] < 0) && (used_col != (int)col))
             {
                 used_col = col;
                 dest[count] = matrix[row][col];
@@ -142,21 +147,21 @@ void save_1st_negative_col_elems(int rows, int cols, int matrix[rows][cols], int
 // Изменяет исходную матрицу следующим образом:
 // 1-й отрицательный элемент в столбце заменяется на
 // сумму оставшихся элементов
-void replace_1st_negative_in_col(int rows, int cols, int matrix[rows][cols])
+void replace_1st_negative_in_col(size_t rows, size_t cols, double matrix[rows][cols])
 {
     int used_col = -1;
 
-    for (int col = 0; col < rows; col++)
+    for (size_t col = 0UL; col < rows; col++)
     {
-        for (int row = 0; row < cols; row++)
+        for (size_t row = 0UL; row < cols; row++)
         {
             // Если найден отрицательный элемент и эти столбцы ранее не встречались
             // запомните его (присвоите ему значение 'used_col')
-            if ((matrix[row][col] < 0) && (used_col != col))
+            if ((matrix[row][col] < 0) && (used_col != (int)col))
             {
                 used_col = col;
 
-                int sum = 0;
+                double sum = 0.0;
                 for (int k = row; k < N; k++)
                 {
                     if ((k + 1) < N)
@@ -171,45 +176,90 @@ void replace_1st_negative_in_col(int rows, int cols, int matrix[rows][cols])
     }
 }
 
+enum Menu
+{
+    start_menu = 1,
+    exit_menu = 2
+};
+
+enum subMenu
+{
+    manual_submenu = 1,
+    random_submenu = 2,
+    exit_submenu = 3
+};
+
 // Выполняет некоторую функциональность,
 // которая задается переменной 'input'
-void menu(int input, int rows, int cols)
+void perform_some_functionality(size_t rows, size_t cols)
 {
-    switch (input)
+    for (;;)
     {
-    case 1:
-    {
-        int matrix_man[rows][cols];
-        matrix_input_manual(rows, cols, matrix_man);
-        printf("Изначальная матрица:\n");
-        print_int_matrix(rows, cols, matrix_man);
-        printf("Массив:\n");
-        int neg_arr[count_cols_with_negative(rows, cols, matrix_man)];
-        print_int_arr(count_cols_with_negative(rows, cols, matrix_man), neg_arr);
-        printf("Преобразованная матрица:\n");
-        print_int_matrix(rows, cols, matrix_man);
-        break;
-    }
-    case 2:
-    {
-        int matrix_rdm[rows][cols];
-        matrix_input_random(rows, cols, matrix_rdm);
-        printf("Изначальная матрица:\n");
-        print_int_matrix(rows, cols, matrix_rdm);
-        printf("Массив:\n");
-        int neg_arr[count_cols_with_negative(rows, cols, matrix_rdm)];
-        save_1st_negative_col_elems(rows, cols, matrix_rdm, neg_arr);
-        print_int_arr(count_cols_with_negative(rows, cols, matrix_rdm), neg_arr);
-        printf("Преобразованная матрица:\n");
-        print_int_matrix(rows, cols, matrix_rdm);
-        break;
-    }
-    case 3:
-        printf("Выход ...\n");
-        break;
-    default:
-        printf("Неверный ввод, попробуйте снова\n");
-        break;
+        print_menu();
+        enum Menu input_menu = (int)input_double();
+
+        switch (input_menu)
+        {
+        case start_menu:
+        {
+            bool flag = false;
+
+            while (flag != true)
+            {
+                print_submenu();
+                enum subMenu input_submenu;
+                input_submenu = (int)input_double();
+
+                switch (input_submenu)
+                {
+                case manual_submenu:
+                {
+                    double matrix_man[rows][cols];
+                    matrix_input_manual(rows, cols, matrix_man);
+                    printf("Изначальная матрица:\n");
+                    print_double_matrix(rows, cols, matrix_man);
+                    double neg_arr[count_cols_with_negative(rows, cols, matrix_man)];
+                    save_1st_negative_col_elems(rows, cols, matrix_man, neg_arr);
+                    print_double_arr(count_cols_with_negative(rows, cols, matrix_man), neg_arr);
+                    printf("Преобразованная матрица:\n");
+                    print_double_matrix(rows, cols, matrix_man);
+                    break;
+                }
+                case random_submenu:
+                {
+                    double matrix_rdm[rows][cols];
+                    matrix_input_random(rows, cols, matrix_rdm);
+                    printf("Изначальная матрица:\n");
+                    print_double_matrix(rows, cols, matrix_rdm);
+                    double neg_arr[count_cols_with_negative(rows, cols, matrix_rdm)];
+                    save_1st_negative_col_elems(rows, cols, matrix_rdm, neg_arr);
+                    print_double_arr(count_cols_with_negative(rows, cols, matrix_rdm), neg_arr);
+                    printf("Преобразованная матрица:\n");
+                    print_double_matrix(rows, cols, matrix_rdm);
+                    break;
+                }
+                case exit_submenu:
+                {
+                    printf("Выход из подменю ...\n");
+                    flag = true;
+                    break;
+                }
+                default:
+                    printf("Неверный ввод, попробуйте снова\n");
+                    break;
+                }
+            }
+            break;
+        }
+        case exit_menu:
+        {
+            printf("Выход из программы ...\n");
+            exit(1);
+        }
+        default:
+            printf("Неверный ввод, попробуйте снова\n");
+            break;
+        }
     }
 }
 
@@ -217,15 +267,7 @@ int main()
 {
     // Подключение локализации русского языка
     setlocale(LC_ALL, "rus");
-
-    int input = 0;
-
-    while (input != 3)
-    {
-        print_menu();
-        input = input_int();
-        menu(input, N, M);
-    }
+    perform_some_functionality(N, M);
 
     return 0;
 }
