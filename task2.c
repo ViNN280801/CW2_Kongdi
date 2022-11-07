@@ -6,6 +6,9 @@
 
 #define N 30
 
+// Переменная для хранения максимального размера вводимой строки
+#define BUFFER_SIZE 256
+
 void print_menu()
 {
     printf("1. Ручной ввод\n2. Заполнение случайными числами\n3. Выход\nВвдите значение: ");
@@ -32,13 +35,37 @@ void replace_negative_to_square(int size, int parr[size])
     }
 }
 
+// Возвращает число, введённое пользователем
+// Обрабатывает возможный ввод символов или строки
+int input_int()
+{
+    // Инициализация массива 256-ью нулями
+    char buffer[BUFFER_SIZE] = {0};
+
+    // Пользователь вводит строку
+    scanf("%s", buffer);
+
+    // Если функция atoi() возвращает 0, т.е.
+    // ей не удалось преобразовать введённую строку в число,
+    // выводим сообщение и просим заново ввести число
+    while (atoi(buffer) == 0)
+    {
+        printf("Вы ввели не число. Попробуйте снова: ");
+        scanf("%s", buffer);
+    }
+
+    // Строка преобразуется в число с помощью atoi() (alpha to numeric)
+    // Затем возвращается целочисленное значение
+    return atoi(buffer);
+}
+
 // Заполняет массив пользовательскими значениями
 void arr_input_manual(int size, int parr[size])
 {
     for (int i = 0; i < size; i++)
     {
         printf("parr[%d] = ", i);
-        scanf("%d", &parr[i]);
+        parr[i] = input_int();
     }
 }
 
@@ -81,7 +108,7 @@ int sum_elems_in_arr(int size, int parr[size])
 // Возвращает произведение всех элементов в последовательности
 unsigned long long product_elems_in_arr(int size, int parr[size])
 {
-    long long product = 1;
+    unsigned long long product = 1;
 
     for (int i = 0; i < size; i++)
         product *= parr[i];
@@ -94,7 +121,7 @@ unsigned long long product_elems_in_arr(int size, int parr[size])
 void print_results_of_cheking(int size, int parr[size])
 {
     if (is_non_decreasing_sequence(size, parr))
-        printf("Произведение всех элементов в последовательности = %d\n", sum_elems_in_arr(size, parr));
+        printf("Сумма всех элементов в последовательности = %d\n", sum_elems_in_arr(size, parr));
     else
         printf("Произведение всех элементов в последовательности = %llu\n", product_elems_in_arr(size, parr));
 }
@@ -144,7 +171,7 @@ int main()
     while (input != 3)
     {
         print_menu();
-        scanf("%d", &input);
+        input = input_int();
         menu(input, N);
     }
 

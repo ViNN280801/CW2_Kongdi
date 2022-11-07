@@ -7,6 +7,9 @@
 #define N 5
 #define M 6
 
+// Переменная для хранения максимального размера вводимой строки
+#define BUFFER_SIZE 256
+
 void print_int_arr(int arr_size, int parr[arr_size])
 {
     printf("\n==== ==== ==== ==== ====\nМассив отрицательных значений: \n");
@@ -35,6 +38,30 @@ void print_int_matrix(int rows, int cols, int matrix[rows][cols])
     }
 }
 
+// Возвращает число, введённое пользователем
+// Обрабатывает возможный ввод символов или строки
+int input_int()
+{
+    // Инициализация массива 256-ью нулями
+    char buffer[BUFFER_SIZE] = {0};
+
+    // Пользователь вводит строку
+    scanf("%s", buffer);
+
+    // Если функция atoi() возвращает 0, т.е.
+    // ей не удалось преобразовать введённую строку в число,
+    // выводим сообщение и просим заново ввести число
+    while (atoi(buffer) == 0)
+    {
+        printf("Вы ввели не число. Попробуйте снова: ");
+        scanf("%s", buffer);
+    }
+
+    // Строка преобразуется в число с помощью atoi() (alpha to numeric)
+    // Затем возвращается целочисленное значение
+    return atoi(buffer);
+}
+
 // Заполняет пользовательскими числами переданную как аргумент матрицу
 void matrix_input_manual(int rows, int cols, int matrix[rows][cols])
 {
@@ -43,7 +70,7 @@ void matrix_input_manual(int rows, int cols, int matrix[rows][cols])
         for (int col = 0; col < cols; col++)
         {
             printf("матрица[%d][%d] = ", row, col);
-            scanf("%d", &matrix[row][col]);
+            matrix[row][col] = input_int();
         }
     }
 }
@@ -109,7 +136,7 @@ void save_1st_negative_col_elems(int rows, int cols, int matrix[rows][cols], int
                 count++;
             }
         }
-    }   
+    }
 }
 
 // Изменяет исходную матрицу следующим образом:
@@ -196,7 +223,7 @@ int main()
     while (input != 3)
     {
         print_menu();
-        scanf("%d", &input);
+        input = input_int();
         menu(input, N, M);
     }
 
