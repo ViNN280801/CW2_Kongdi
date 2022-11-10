@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <time.h>
 #include <locale.h>
 
@@ -87,17 +86,15 @@ void arr_input_rndm(size_t size, double parr[size])
     }
 }
 
-// Возвращает "true", если последовательность 'parr' неубывающая
-// В противном случае - "false"
-bool is_non_decreasing_sequence(size_t size, double parr[size])
+// Возвращает "1", если последовательность 'parr' неубывающая
+// В противном случае - "0"
+int is_non_decreasing_sequence(size_t size, double parr[size])
 {
-    bool flag = true;
-
     for (size_t i = 0UL; i < size; i++)
         if ((parr[i] > parr[i + 1]) && ((i + 1) < N))
-            flag = false;
+            return 0;
 
-    return flag;
+    return 1;
 }
 
 // Возвращает сумму всех элементов в последовательности
@@ -158,9 +155,9 @@ void perform_some_functionality(size_t size)
         {
         case start_menu:
         {
-            bool flag = false;
+            int flag = 0;
 
-            while (flag != true)
+            while (flag != 1)
             {
                 print_submenu();
                 enum subMenu input_submenu;
@@ -191,7 +188,7 @@ void perform_some_functionality(size_t size)
                 case exit_submenu:
                 {
                     printf("Выход из подменю ...\n");
-                    flag = true;
+                    flag = 1;
                     break;
                 }
                 default:

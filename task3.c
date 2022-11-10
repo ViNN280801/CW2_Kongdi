@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
 #include <locale.h>
@@ -89,7 +88,7 @@ void matrix_input_random(size_t rows, size_t cols, double matrix[rows][cols])
     {
         for (size_t col = 0UL; col < M; col++)
         {
-            matrix[row][col] = (double)rand() / RAND_MAX * 6.0 - 5.0;
+            matrix[row][col] = (double)rand() / RAND_MAX * 10.0 - 5.0;
         }
     }
 }
@@ -149,7 +148,7 @@ void save_1st_negative_col_elems(size_t rows, size_t cols, double matrix[rows][c
 // сумму оставшихся элементов
 void replace_1st_negative_in_col(size_t rows, size_t cols, double matrix[rows][cols])
 {
-    int used_col = -1;
+    size_t used_col = -1;
 
     for (size_t col = 0UL; col < rows; col++)
     {
@@ -157,19 +156,19 @@ void replace_1st_negative_in_col(size_t rows, size_t cols, double matrix[rows][c
         {
             // Если найден отрицательный элемент и эти столбцы ранее не встречались
             // запомните его (присвоите ему значение 'used_col')
-            if ((matrix[row][col] < 0) && (used_col != (int)col))
+            if ((matrix[row][col] < 0.0) && (used_col != col))
             {
                 used_col = col;
 
                 double sum = 0.0;
-                for (int k = row; k < N; k++)
+                for (size_t k = row; k < N; k++)
                 {
-                    if ((k + 1) < N)
-                        sum += matrix[k + 1][used_col];
+                    if ((k + 1UL) < N)
+                        sum += matrix[k + 1UL][used_col];
                 }
 
                 // // Нам не нужно менять элемент с индексом последней строки
-                if (row != N - 1)
+                if (row != (N - 1))
                     matrix[row][col] = sum;
             }
         }
@@ -202,9 +201,9 @@ void perform_some_functionality(size_t rows, size_t cols)
         {
         case start_menu:
         {
-            bool flag = false;
+            int flag = 0;
 
-            while (flag != true)
+            while (flag != 1)
             {
                 print_submenu();
                 enum subMenu input_submenu;
@@ -222,6 +221,7 @@ void perform_some_functionality(size_t rows, size_t cols)
                     save_1st_negative_col_elems(rows, cols, matrix_man, neg_arr);
                     print_double_arr(count_cols_with_negative(rows, cols, matrix_man), neg_arr);
                     printf("Преобразованная матрица:\n");
+                    replace_1st_negative_in_col(rows, cols, matrix_man);
                     print_double_matrix(rows, cols, matrix_man);
                     break;
                 }
@@ -235,13 +235,14 @@ void perform_some_functionality(size_t rows, size_t cols)
                     save_1st_negative_col_elems(rows, cols, matrix_rdm, neg_arr);
                     print_double_arr(count_cols_with_negative(rows, cols, matrix_rdm), neg_arr);
                     printf("Преобразованная матрица:\n");
+                    replace_1st_negative_in_col(rows, cols, matrix_rdm);
                     print_double_matrix(rows, cols, matrix_rdm);
                     break;
                 }
                 case exit_submenu:
                 {
                     printf("Выход из подменю ...\n");
-                    flag = true;
+                    flag = 1;
                     break;
                 }
                 default:
