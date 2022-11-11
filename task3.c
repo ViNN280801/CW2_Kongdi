@@ -155,16 +155,16 @@ void replace_1st_negative_in_col(size_t rows, size_t cols, double matrix[rows][c
         for (size_t row = 0UL; row < rows; row++)
         {
             // Если найден отрицательный элемент и эти столбцы ранее не встречались
-            // запомните его (присвоите ему значение 'used_col')
+            // запоминаем его (присваиваем ему значение 'used_col')
             if ((matrix[row][col] < 0.0) && (used_col != col))
             {
                 used_col = col;
 
                 double sum = 0.0;
-                for (size_t k = row; k < N; k++)
+                for (size_t k = row; k < rows; k++)
                 {
-                    if ((k + 1UL) < N)
-                        sum += matrix[k + 1UL][used_col];
+                    if ((k + 1UL) < rows && ((used_col + 1UL) < cols))
+                        sum += matrix[k + 1UL][used_col + 1UL];
                 }
 
                 // Нам не нужно менять элемент с индексом последней строки
