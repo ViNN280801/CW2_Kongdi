@@ -82,7 +82,7 @@ void arr_input_rndm(size_t size, double parr[size])
     // Заполнение массива случайными целочисленными значениями
     for (size_t i = 0; i < size; i++)
     {
-        parr[i] = (double)rand() / RAND_MAX * 6.0 - 5.0;
+        parr[i] = (double)rand() / RAND_MAX * 10.0 - 5.0;
     }
 }
 
@@ -121,12 +121,15 @@ double product_elems_in_arr(size_t size, double parr[size])
 
 // Выводит сумму элементов, если 'parr' является неубывающей последовательностью
 // В противном случае печатается произведение элементов
-void print_results_of_cheking(size_t size, double parr[size])
+void print_results_of_cheking(size_t size_transformed, double parr_transformed[size_transformed],
+                              size_t size_original, double parr_original[size_original])
 {
-    if (is_non_decreasing_sequence(size, parr))
-        printf("Сумма всех элементов в последовательности = %f\n", sum_elems_in_arr(size, parr));
+    if (is_non_decreasing_sequence(size_transformed, parr_transformed))
+        printf("Сумма всех элементов в исходной последовательности = %f\n",
+               sum_elems_in_arr(size_original, parr_original));
     else
-        printf("Произведение всех элементов в последовательности = %f\n", product_elems_in_arr(size, parr));
+        printf("Произведение всех элементов в исходной последовательности = %f\n",
+               product_elems_in_arr(size_original, parr_original));
 }
 
 enum Menu
@@ -169,20 +172,30 @@ void perform_some_functionality(size_t size)
                 {
                     double parr_man[size];
                     arr_input_manual(size, parr_man);
+                    double parr_orig[size];
+
+                    for (size_t i = 0UL; i < size; i++)
+                        parr_orig[i] = parr_man[i];
+
                     print_double_arr(size, parr_man);
                     replace_negative_to_square(size, parr_man);
                     print_double_arr(size, parr_man);
-                    print_results_of_cheking(size, parr_man);
+                    print_results_of_cheking(size, parr_man, size, parr_orig);
                     break;
                 }
                 case random_submenu:
                 {
                     double parr_rdm[size];
                     arr_input_rndm(size, parr_rdm);
+                    double parr_orig[size];
+
+                    for (size_t i = 0UL; i < size; i++)
+                        parr_orig[i] = parr_rdm[i];
+
                     print_double_arr(size, parr_rdm);
                     replace_negative_to_square(size, parr_rdm);
                     print_double_arr(size, parr_rdm);
-                    print_results_of_cheking(size, parr_rdm);
+                    print_results_of_cheking(size, parr_rdm, size, parr_orig);
                     break;
                 }
                 case exit_submenu:
