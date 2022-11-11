@@ -148,30 +148,27 @@ void save_1st_negative_col_elems(size_t rows, size_t cols, double matrix[rows][c
 // сумму оставшихся элементов
 void replace_1st_negative_in_col(size_t rows, size_t cols, double matrix[rows][cols])
 {
-    size_t used_col = -1;
+    // Переменные, чтобы найти строку и колонку первого отрицательного элемента
+    int negative_row = -1, negative_col = -1;
+    double negative_elem = 0.0;
 
     for (size_t col = 0UL; col < cols; col++)
     {
+        double sum = 0.0;
         for (size_t row = 0UL; row < rows; row++)
         {
-            // Если найден отрицательный элемент и эти столбцы ранее не встречались
-            // запоминаем его (присваиваем ему значение 'used_col')
-            if ((matrix[row][col] < 0.0) && (used_col != col))
+            // Суммируем все элементы колонки
+            sum += matrix[row][col];
+
+            // Находим отрицательный элемент, запоминаем его индексы и сам элемент
+            if ((matrix[row][col] < 0.0) && (negative_col != (int)col))
             {
-                used_col = col;
-
-                double sum = 0.0;
-                for (size_t k = row; k < rows; k++)
-                {
-                    if ((k + 1UL) < rows && ((used_col + 1UL) < cols))
-                        sum += matrix[k + 1UL][used_col + 1UL];
-                }
-
-                // Нам не нужно менять элемент с индексом последней строки
-                if (row != (N - 1))
-                    matrix[row][col] = sum;
+                negative_row = row;
+                negative_col = col;
+                negative_elem = matrix[row][col];
             }
         }
+        matrix[negative_row][negative_col] = sum - negative_elem;
     }
 }
 
